@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; background: #f4f7f6; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; }
+        .input-group input { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        .question { background: #fafafa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #eee; }
+        button { background: #007bff; color: white; padding: 12px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        #test-section { display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div id="login-section">
+            <h2>Testga kirish</h2>
+            <div class="input-group"><input type="text" id="firstName" placeholder="Ismingiz"></div>
+            <div class="input-group"><input type="text" id="lastName" placeholder="Familiyangiz"></div>
+            <div class="input-group"><input type="text" id="groupName" placeholder="Guruhingiz (masalan: 10-A)"></div>
+            <button onclick="startTest()">Testni Boshlash</button>
+        </div>
+
+        <div id="test-section">
+            <h2>Test Savollari</h2>
+            <div class="question">
+                <p><b>1-savol:</b> O'zbekiston poytaxti qaysi shahar?</p>
+                <label><input type="radio" name="q1" value="A"> A) Samarqand</label><br>
+                <label><input type="radio" name="q1" value="B"> B) Toshkent</label><br>
+                <label><input type="radio" name="q1" value="C"> C) Buxoro</label>
+            </div>
+            <div class="question">
+                <p><b>2-savol:</b> 15 + 25 nechaga teng?</p>
+                <label><input type="radio" name="q2" value="A"> A) 40</label><br>
+                <label><input type="radio" name="q2" value="B"> B) 35</label><br>
+                <label><input type="radio" name="q2" value="C"> C) 50</label>
+            </div>
+            <button onclick="finishTest()" style="background-color: #28a745;">Testni Yakunlash</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

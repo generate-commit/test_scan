@@ -4,25 +4,34 @@ export default async function handler(req, res) {
     }
 
     const { type, studentInfo, results } = req.body;
-    const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
+    // TOKEN VA ID'LARNI TO'G'RIDAN-TO'G'RI SHU YERGA YOZASIZ:
+    const BOT_TOKEN = "8502635236:AAGL3bj1x4eQAGnqI86voIbpIMBKY9FKTYc"; 
+    const CHAT_ID = "8694565465";     
+    const OWNER_ID = "8694565465'";   
 
     let messageText = "";
 
     if (type === 'start') {
-        messageText = `🚀 TEST BOSHLANDI!\n\n👤 O'quvchi: ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 Guruh: ${studentInfo.groupName}\n⏰ Vaqti: ${new Date().toLocaleTimeString("uz-UZ")}`;
+        messageText = `🚀 *O'quvchi testga kirdi!*\n\n👤 *Ism/Familiya:* ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 *Guruh:* ${studentInfo.groupName}\n⏰ *Vaqt:* ${new Date().toLocaleTimeString("uz-UZ")}`;
     } else if (type === 'finish') {
-        messageText = `✅ TEST YAKUNLANDI!\n\n👤 O'quvchi: ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 Guruh: ${studentInfo.groupName}\n📊 Natija: ${results.score} / ${results.totalQuestions} ball\n\n📝 Javoblar:\n${results.details}`;
+        messageText = `✅ *Test yakunlandi!*\n\n👤 *O'quvchi:* ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 *Guruh:* ${studentInfo.groupName}\n📊 *Natija:* ${results.score} / ${results.totalQuestions} (${results.percentage}%)\n\n📝 *Javoblar tafsiloti:*\n${results.details}`;
+    }
+
+    async function sendToTelegram(chatId) {
+        if (!chatId) return;
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+        });
     }
 
     try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: CHAT_ID, text: messageText })
-        });
-        const data = await response.json();
-        return res.status(200).json({ success: data.ok });
+        await sendToTelegram(CHAT_ID);
+        await sendToTelegram(OWNER_ID);
+
+        return res.status(200).json({ success: true });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }

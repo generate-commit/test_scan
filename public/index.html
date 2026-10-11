@@ -195,9 +195,8 @@
 </div>
 
 <script>
-    // Telegram WebApp ni ishga tushirish va ranglarini moslash
     let tg = window.Telegram.WebApp;
-    tg.expand(); // Mini ilovani ekranga to'liq ochish
+    tg.expand();
 
     const questionsDatabase = [
         { id: 1, question: "O'zbekiston poytaxti qaysi shahar?", options: ["Samarqand", "Toshkent", "Buxoro", "Namangan"], correct: "Toshkent" },
@@ -208,7 +207,7 @@
 
     let studentData = {};
     let timer;
-    let timeLeft = 300; // 5 daqiqa
+    let timeLeft = 300;
 
     function startTest() {
         const firstName = document.getElementById('firstName').value.trim();
@@ -216,13 +215,12 @@
         const groupName = document.getElementById('groupName').value.trim();
 
         if (!firstName || !lastName || !groupName) {
-            alert("Iltimos, barchamaydonlarni to'liq to'ldiring!");
+            alert("Iltimos, barcha maydonlarni to'liq to'ldiring!");
             return;
         }
 
         studentData = { firstName, lastName, groupName };
 
-        // Botga o'quvchi kirdi deb xabar berish
         fetch('/api/send', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -291,7 +289,7 @@
                 <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid ${isCorrect ? '#bbf7d0' : '#fecaca'}">
                     <p style="margin:0 0 6px 0; font-size:14px;"><b>${index + 1}. ${q.question}</b></p>
                     <p style="margin:0; font-size:13px;">Sizning javobingiz: <b>${userAns}</b> ${isCorrect ? '✅' : '❌'}</p>
-                    ${!isCardCorrect = !isCorrect ? `<p style="color: #dc2626; margin:4px 0 0 0; font-size:13px;">To'g'ri javob: ${q.correct}</p>` : ''}
+                    ${!isCorrect ? `<p style="color: #dc2626; margin:4px 0 0 0; font-size:13px;">To'g'ri javob: ${q.correct}</p>` : ''}
                 </div>
             `;
         });

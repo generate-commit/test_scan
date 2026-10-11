@@ -5,16 +5,16 @@ export default async function handler(req, res) {
 
     const { type, studentInfo, results } = req.body;
 
-    // TOKEN VA ID'LARINGIZNI SHU YERGA ANIQ YOZING:
+    // TOKEN VA ID'LARINGIZNI YANA BIR BOR TEKshirib YozING:
     const BOT_TOKEN = "8502635236:AAGL3bj1x4eQAGnqI86voIbpIMBKY9FKTYc"; 
-    const CHAT_ID = "8694565465"; // Guruh yoki o'zingizning Telegram ID'ingiz
+    const CHAT_ID = "8694565465";
 
     let messageText = "";
 
     if (type === 'start') {
-        messageText = `🚀 *O'quvchi testni boshladi!*\n\n👤 *O'quvchi:* ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 *Guruh:* ${studentInfo.groupName}\n⏰ *Vaqt:* ${new Date().toLocaleTimeString("uz-UZ")}`;
+        messageText = `🚀 O'quvchi testni boshladi!\n\n👤 O'quvchi: ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 Guruh: ${studentInfo.groupName}\n⏰ Vaqt: ${new Date().toLocaleTimeString("uz-UZ")}`;
     } else if (type === 'finish') {
-        messageText = `🎯 *Test Yakunlandi!*\n\n👤 *O'quvchi:* ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 *Guruh:* ${studentInfo.groupName}\n📊 *Natija:* ${results.score} / ${results.totalQuestions} (${results.percentage}%)\n\n📝 *Javoblar tafsiloti:*\n${results.details}`;
+        messageText = `🎯 Test Yakunlandi!\n\n👤 O'quvchi: ${studentInfo.lastName} ${studentInfo.firstName}\n🏫 Guruh: ${studentInfo.groupName}\n📊 Natija: ${results.score} / ${results.totalQuestions} (${results.percentage}%)\n\n📝 Javoblar tafsiloti:\n${results.details}`;
     }
 
     try {
@@ -23,8 +23,8 @@ export default async function handler(req, res) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 chat_id: CHAT_ID, 
-                text: messageText, 
-                parse_mode: 'Markdown' 
+                text: messageText 
+                // parse_mode olib tashlandi, shuning uchun hech qanday formatlash xatosi bo'lmaydi!
             })
         });
 

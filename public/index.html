@@ -3,45 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Test</title>
+    <title>Onlayn Bilim Sinovi</title>
+    <!-- Telegram WebApp kutubxonasi -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; background: #f4f7f6; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .input-group { margin-bottom: 15px; }
-        .input-group input { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-        .question { background: #fafafa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #eee; }
-        button { background: #007bff; color: white; padding: 12px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; }
-        button:hover { background: #0056b3; }
-        #test-section { display: none; }
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #f8fafc);
+            --text-color: var(--tg-theme-text-color, #1e293b);
+            --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+            --button-color: var(--tg-theme-button-color, #2563eb);
+            --button-text: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+        }
+
+        .btn {
+            background: var(--button-color);
+            color: var(--button-text);
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .question-card {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+        }
+
+        .question-card p {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 8px 0;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .option-label:hover {
+            border-color: #2563eb;
+            background: #f1f5f9;
+        }
+
+        .option-label input {
+            margin-right: 10px;
+            accent-color: #2563eb;
+        }
+
+        .timer-box {
+            font-size: 15px;
+            font-weight: bold;
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 16px;
+            border: 1px solid #fecaca;
+        }
+
+        #test-section, #result-section {
+            display: none;
+        }
+
+        .result-box {
+            text-align: center;
+            font-size: 20px;
+            color: #16a34a;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div id="login-section">
-            <h2>Testga kirish</h2>
-            <div class="input-group"><input type="text" id="firstName" placeholder="Ismingiz"></div>
-            <div class="input-group"><input type="text" id="lastName" placeholder="Familiyangiz"></div>
-            <div class="input-group"><input type="text" id="groupName" placeholder="Guruhingiz (masalan: 10-A)"></div>
-            <button onclick="startTest()">Testni Boshlash</button>
-        </div>
 
-        <div id="test-section">
-            <h2>Test Savollari</h2>
-            <div class="question">
-                <p><b>1-savol:</b> O'zbekiston poytaxti qaysi shahar?</p>
-                <label><input type="radio" name="q1" value="A"> A) Samarqand</label><br>
-                <label><input type="radio" name="q1" value="B"> B) Toshkent</label><br>
-                <label><input type="radio" name="q1" value="C"> C) Buxoro</label>
-            </div>
-            <div class="question">
-                <p><b>2-savol:</b> 15 + 25 nechaga teng?</p>
-                <label><input type="radio" name="q2" value="A"> A) 40</label><br>
-                <label><input type="radio" name="q2" value="B"> B) 35</label><br>
-                <label><input type="radio" name="q2" value="C"> C) 50</label>
-            </div>
-            <button onclick="finishTest()" style="background-color: #28a745;">Testni Yakunlash</button>
+<div class="container">
+    <!-- 1. Ro'yxatdan o'tish qismi -->
+    <div id="login-section">
+        <h2>✨ Bilim Sinoviga Xush Kelibsiz</h2>
+        <div class="form-group">
+            <label>Ismingiz:</label>
+            <input type="text" id="firstName" placeholder="Ismingizni kiriting" required>
         </div>
+        <div class="form-group">
+            <label>Familiyangiz:</label>
+            <input type="text" id="lastName" placeholder="Familiyangizni kiriting" required>
+        </div>
+        <div class="form-group">
+            <label>Guruhingiz:</label>
+            <input type="text" id="groupName" placeholder="Masalan: 10-A" required>
+        </div>
+        <button class="btn" onclick="startTest()">Testni Boshlash</button>
     </div>
-    <script src="script.js"></script>
+
+    <!-- 2. Test Savollari Qismi -->
+    <div id="test-section">
+        <div class="timer-box">⏳ Qolgan vaqt: <span id="time">05:00</span></div>
+        <div id="questions-container"></div>
+        <button class="btn" style="background: #16a34a;" onclick="finishTest()">Testni Yakunlash</button>
+    </div>
+
+    <!-- 3. Natija Sahifasi -->
+    <div id="result-section">
+        <h2>🎉 Test Yakunlandi!</h2>
+        <div class="result-box" id="score-text"></div>
+        <div id="review-container"></div>
+    </div>
+</div>
+
+<script>
+    // Telegram WebApp ni ishga tushirish va ranglarini moslash
+    let tg = window.Telegram.WebApp;
+    tg.expand(); // Mini ilovani ekranga to'liq ochish
+
+    const questionsDatabase = [
+        { id: 1, question: "O'zbekiston poytaxti qaysi shahar?", options: ["Samarqand", "Toshkent", "Buxoro", "Namangan"], correct: "Toshkent" },
+        { id: 2, question: "Python dasturlash tilida ekranga chiqarish funksiyasi qaysi?", options: ["echo", "print", "console.log", "write"], correct: "print" },
+        { id: 3, question: "5 * 5 + 5 nechaga teng?", options: ["25", "30", "35", "20"], correct: "30" },
+        { id: 4, question: "Vercel asosan qanday turdagi ilovalarni joylash uchun qulay?", options: ["Faqat mobil ilovalar", "Frontend va Serverless loyihalar", "Faqat Desktop o'yinlar", "Fayl Server"], correct: "Frontend va Serverless loyihalar" }
+    ];
+
+    let studentData = {};
+    let timer;
+    let timeLeft = 300; // 5 daqiqa
+
+    function startTest() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const groupName = document.getElementById('groupName').value.trim();
+
+        if (!firstName || !lastName || !groupName) {
+            alert("Iltimos, barchamaydonlarni to'liq to'ldiring!");
+            return;
+        }
+
+        studentData = { firstName, lastName, groupName };
+
+        // Botga o'quvchi kirdi deb xabar berish
+        fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'start', studentInfo: studentData })
+        });
+
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('test-section').style.display = 'block';
+
+        renderQuestions();
+        startTimer();
+    }
+
+    function renderQuestions() {
+        let container = document.getElementById('questions-container');
+        container.innerHTML = "";
+
+        questionsDatabase.forEach((q, index) => {
+            let optionsHtml = q.options.map(opt => `
+                <label class="option-label">
+                    <input type="radio" name="q${q.id}" value="${opt}"> ${opt}
+                </label>
+            `).join('');
+
+            container.innerHTML += `
+                <div class="question-card">
+                    <p>${index + 1}. ${q.question}</p>
+                    ${optionsHtml}
+                </div>
+            `;
+        });
+    }
+
+    function startTimer() {
+        timer = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                alert("Vaqtingiz tugadi!");
+                finishTest();
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    async function finishTest() {
+        clearInterval(timer);
+        let score = 0;
+        let totalQuestions = questionsDatabase.length;
+        let detailsText = "";
+        let reviewHtml = "<h3 style='font-size:16px; margin-top:20px;'>Javoblar tahlili:</h3>";
+
+        questionsDatabase.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            const userAns = selected ? selected.value : "Belgilanmadi";
+
+            let isCorrect = (userAns === q.correct);
+            if (isCorrect) score++;
+
+            detailsText += `${index + 1}. Savol: ${q.question}\nJavob: ${userAns} ${isCorrect ? '✅' : '❌ (To\'g\'ri: ' + q.correct + ')'}\n\n`;
+            
+            reviewHtml += `
+                <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid ${isCorrect ? '#bbf7d0' : '#fecaca'}">
+                    <p style="margin:0 0 6px 0; font-size:14px;"><b>${index + 1}. ${q.question}</b></p>
+                    <p style="margin:0; font-size:13px;">Sizning javobingiz: <b>${userAns}</b> ${isCorrect ? '✅' : '❌'}</p>
+                    ${!isCardCorrect = !isCorrect ? `<p style="color: #dc2626; margin:4px 0 0 0; font-size:13px;">To'g'ri javob: ${q.correct}</p>` : ''}
+                </div>
+            `;
+        });
+
+        let percentage = Math.round((score / totalQuestions) * 100);
+
+        await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'finish',
+                studentInfo: studentData,
+                results: { score, totalQuestions, percentage, details: detailsText }
+            })
+        });
+
+        document.getElementById('test-section').style.display = 'none';
+        document.getElementById('result-section').style.display = 'block';
+        document.getElementById('score-text').textContent = `Natijangiz: ${score} / ${totalQuestions} (${percentage}%)`;
+        document.getElementById('review-container').innerHTML = reviewHtml;
+    }
+</script>
+
 </body>
 </html>

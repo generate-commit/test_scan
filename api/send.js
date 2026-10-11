@@ -6,8 +6,8 @@ export default async function handler(req, res) {
     const { type, studentInfo, results } = req.body;
 
     // TOKEN VA ID'LARINGIZNI SHU YERGA ANIQ YOZING:
-    const BOT_TOKEN = "7xxxxxxxx:AAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; 
-    const CHAT_ID = "-100xxxxxxxxxx"; // Guruh yoki o'zingizning Telegram ID'ingiz
+    const BOT_TOKEN = "8502635236:AAGL3bj1x4eQAGnqI86voIbpIMBKY9FKTYc"; 
+    const CHAT_ID = "8694565465"; // Guruh yoki o'zingizning Telegram ID'ingiz
 
     let messageText = "";
 
